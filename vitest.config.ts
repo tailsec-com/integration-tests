@@ -1,3 +1,8 @@
+/**
+ * @license MIT
+ * Copyright (c) 2024 Tailsec
+ */
+
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
