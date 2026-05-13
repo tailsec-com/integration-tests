@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: privileged-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: privileged-app
+  template:
+    metadata:
+      labels:
+        app: privileged-app
+    spec:
+      containers:
+        - name: app
+          image: nginx:1.21
+          securityContext:
+            privileged: true
+            readOnlyRootFilesystem: false
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: privileged-app-svc
+  namespace: default
+spec:
+  selector:
+    app: privileged-app
+  ports:
+    - port: 80
+      targetPort: 80
